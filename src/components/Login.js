@@ -1,8 +1,8 @@
 import { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { jwtDecode } from "jwt-decode"; // Import thư viện giải mã JWT
+import { jwtDecode } from "jwt-decode";
 
-export default function LoginForm() {
+export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -29,14 +29,13 @@ export default function LoginForm() {
 
             const decodedToken = jwtDecode(data.token);
 
-            if (decodedToken.role !== "admin") {
+            if (decodedToken.role !== "ADMIN") {
                 throw new Error("Bạn không có quyền truy cập!");
             }
 
             localStorage.setItem("authToken", data.token);
-            alert("Đăng nhập thành công!");
 
-            window.location.href = "/";
+            window.location.href = "/users";
         } catch (err) {
             setError(err.message);
         }
@@ -80,7 +79,7 @@ export default function LoginForm() {
                     </div>
                     {error && <p className="text-danger text-sm mb-2">{error}</p>}
                     <button type="submit" className="btn btn-primary w-100">
-                        Đăng Nhập
+                        Log in
                     </button>
                 </form>
             </div>

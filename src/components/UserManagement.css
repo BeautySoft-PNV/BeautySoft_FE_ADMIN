@@ -1,0 +1,26 @@
+.edit-form {
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 500px;
+    background: white;
+    z-index: 10;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.edit-form .card {
+    border: none;
+}
+
+.edit-form {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+.container{
+    margin-left: 250px;
+}
