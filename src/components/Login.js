@@ -7,11 +7,25 @@ export default function Login() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [showPassword, setShowPassword] = useState(false);
-
+    const validatePassword = (password) => {
+        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{10,}$/;
+        return regex.test(password);
+    };
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
-
+        if (!email.trim()) {
+            setError("Email cannot be empty!");
+            return;
+        }
+        if (!password.trim()) {
+            setError("Password cannot be empty!");
+            return;
+        }
+        if (!validatePassword(password)) {
+            setError("Wrong password!");
+            return;
+        }
         try {
             const response = await fetch("http://192.168.31.183:5280/api/auth/login", {
                 method: "POST",
@@ -20,11 +34,11 @@ export default function Login() {
                 },
                 body: JSON.stringify({ email, password }),
             });
-            console.log(response)
+        
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.message || "Login failed!");
+                throw new Error(data.message ||"Login failed! You have not registered an account." );
             }
 
             const decodedToken = jwtDecode(data.token);
