@@ -16,10 +16,10 @@ export default function AddUserModal({ show, handleClose, refreshUsers }) {
     useEffect(() => {
         const fetchRoles = async () => {
             try {
-                const response = await axios.get("http://192.168.11.183:5280/api/role");
+                const response = await axios.get("http://192.168.31.183:5280/api/role");
                 setRoles(response.data);
             } catch (error) {
-                console.error("Lỗi khi lấy danh sách roles", error);
+                console.error("Error getting list of roles", error);
             }
         };
 
@@ -37,11 +37,11 @@ export default function AddUserModal({ show, handleClose, refreshUsers }) {
 
     const handleAddUser = async (e) => {
         e.preventDefault();
-        setErrors({}); // Reset lỗi trước khi gửi yêu cầu
+        setErrors({}); 
 
         try {
             await axios.post(
-                "http://192.168.11.183:5280/api/auth/register",
+                "http://192.168.31.183:5280/api/auth/register",
                 {
                     username: formData.username,
                     email: formData.email,
@@ -53,14 +53,14 @@ export default function AddUserModal({ show, handleClose, refreshUsers }) {
                 }
             );
 
-            alert("Thêm tài khoản thành công!");
+            alert("Account added successfully!");
             refreshUsers();
             handleClose();
         } catch (error) {
             if (error.response) {
                 const { data } = error.response;
                 if (data.message === "Account already exists!") {
-                    setErrors((prev) => ({ ...prev, email: "Tài khoản đã tồn tại!" }));
+                    setErrors((prev) => ({ ...prev, email: "Account already exists!" }));
                 } else if (data.errors && data.errors.Password) {
                     setErrors((prev) => ({ ...prev, password: data.errors.Password[0] }));
                 }
@@ -71,12 +71,12 @@ export default function AddUserModal({ show, handleClose, refreshUsers }) {
     return (
         <Modal show={show} onHide={handleClose} centered>
             <Modal.Header closeButton>
-                <Modal.Title>Thêm Tài Khoản</Modal.Title>
+                <Modal.Title>Add Account</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <form onSubmit={handleAddUser}>
                     <div className="mb-3">
-                        <label className="form-label">Tên đăng nhập</label>
+                        <label className="form-label">Full Name</label>
                         <input
                             type="text"
                             className="form-control"
@@ -99,7 +99,7 @@ export default function AddUserModal({ show, handleClose, refreshUsers }) {
                         {errors.email && <div className="invalid-feedback">{errors.email}</div>}
                     </div>
                     <div className="mb-3">
-                        <label className="form-label">Mật khẩu</label>
+                        <label className="form-label">Password</label>
                         <input
                             type="password"
                             className={`form-control ${errors.password ? "is-invalid" : ""}`}
@@ -111,7 +111,7 @@ export default function AddUserModal({ show, handleClose, refreshUsers }) {
                         {errors.password && <div className="invalid-feedback">{errors.password}</div>}
                     </div>
                     <div className="mb-3">
-                        <label className="form-label">Vai trò</label>
+                        <label className="form-label">Roles</label>
                         <select
                             className="form-control"
                             name="roleId"
@@ -119,7 +119,7 @@ export default function AddUserModal({ show, handleClose, refreshUsers }) {
                             onChange={handleChange}
                             required
                         >
-                            <option value="">-- Chọn vai trò --</option>
+                            <option value="">-- Select role --</option>
                             {roles.map((role) => (
                                 <option key={role.id} value={role.id}>
                                     {role.name}
@@ -128,7 +128,7 @@ export default function AddUserModal({ show, handleClose, refreshUsers }) {
                         </select>
                     </div>
                     <Button variant="success" type="submit">
-                        Thêm
+                        Add
                     </Button>
                 </form>
             </Modal.Body>

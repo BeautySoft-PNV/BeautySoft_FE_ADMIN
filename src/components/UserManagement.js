@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
-import EditUserModal from "./EditUserModal"; // Import modal mới
+import EditUserModal from "./EditUserModal"; 
 import AddUserModal from "./AddUserModal";
 
 export default function UserManagement() {
     const [users, setUsers] = useState([]);
     const [editingUser, setEditingUser] = useState(null);
     const [showModal, setShowModal] = useState(false);
-    const [showAddModal, setShowAddModal] = useState(false); // Trạng thái modal
+    const [showAddModal, setShowAddModal] = useState(false); 
     const [formData, setFormData] = useState({
         id: "",
         name: "",
@@ -31,20 +31,20 @@ export default function UserManagement() {
     const fetchUsers = async () => {
         try {
             const token = localStorage.getItem("authToken");
-            const response = await axios.get("http://192.168.11.183:5280/api/users/all", {
+            const response = await axios.get("http://192.168.31.183:5280/api/users/all", {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
             setUsers(response.data);
         } catch (error) {
-            console.error("Lỗi khi lấy danh sách người dùng", error);
+            console.error("Error while getting user list", error);
         }
     };
 
     const handleEdit = (user) => {
         if (!user || !user.id) {
-            console.error("User ID không hợp lệ:", user);
+            console.error("Invalid User ID:", user);
             return;
         }
         setEditingUser(user.id);
@@ -84,17 +84,17 @@ export default function UserManagement() {
 
         try {
             const token = localStorage.getItem("authToken");
-            await axios.put(`http://192.168.11.183:5280/api/users/me/${formData.id}`, formDataToSend, {
+            await axios.put(`http://192.168.31.183:5280/api/users/me/${formData.id}`, formDataToSend, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "multipart/form-data"
                 },
             });
-            alert("Cập nhật thành công!");
+            alert("Update successful!");
             await fetchUsers();
             setShowModal(false);
         } catch (error) {
-            console.error("Lỗi khi cập nhật người dùng", error);
+            console.error("Error updating user", error);
         }
     };
 
@@ -102,15 +102,15 @@ export default function UserManagement() {
         const newStatus = !user.isBlocked;
         const action = newStatus ? "block" : "unblock";
         const confirmMessage = newStatus
-            ? `Bạn có chắc chắn muốn KHÓA người dùng ${user.name}?`
-            : `Bạn có chắc chắn muốn MỞ KHÓA người dùng ${user.name}?`;
+            ? `Are you sure you want to LOCK the user? ${user.name}?`
+            : `Are you sure you want to UNLOCK the user? ${user.name}?`;
 
         if (!window.confirm(confirmMessage)) return;
 
         try {
             const token = localStorage.getItem("authToken");
             const response = await axios.put(
-                `http://192.168.11.183:5280/api/users/${action}/${user.id}`,
+                `http://192.168.31.183:5280/api/users/${action}/${user.id}`,
                 {},
                 {
                     headers: {
@@ -121,7 +121,7 @@ export default function UserManagement() {
             );
 
             if (response.status === 200) {
-                alert(`Người dùng ${user.name} đã được ${newStatus ? "KHÓA" : "MỞ KHÓA"}!`);
+                alert(`User ${user.name} has been ${newStatus ? "LOCK" : "UNLOCK"}!`);
 
                 setUsers((prevUsers) =>
                     prevUsers.map((u) =>
@@ -130,8 +130,8 @@ export default function UserManagement() {
                 );
             }
         } catch (error) {
-            console.error("Lỗi khi cập nhật trạng thái người dùng", error);
-            alert("Đã có lỗi xảy ra, vui lòng thử lại.");
+            console.error("Error updating user status", error);
+            alert("An error occurred, please try again.");
         }
     };
 

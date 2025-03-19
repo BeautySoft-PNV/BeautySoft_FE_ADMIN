@@ -55,11 +55,13 @@ export default function Sidebar() {
             </ul>
 
             <button
-                className="btn btn-danger mt-auto  fw-bold"
-                onClick={handleLogout}
-                style={{height:"50px", textAlign:"center"}}>
-                🚪 Logout
+            className="btn btn-danger mt-auto fw-bold"
+            onClick={handleLogout}
+            style={{ height: "50px", textAlign: "center" }}
+            >
+            <i className="bi bi-door-closed"></i> Logout
             </button>
+
         </div>
     );
 }
