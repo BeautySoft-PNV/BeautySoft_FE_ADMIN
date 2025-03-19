@@ -13,7 +13,7 @@ export default function Login() {
         setError("");
 
         try {
-            const response = await fetch("http://192.168.11.183:5280/api/auth/login", {
+            const response = await fetch("http://192.168.31.183:5280/api/auth/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -24,13 +24,13 @@ export default function Login() {
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.message || "Đăng nhập thất bại!");
+                throw new Error(data.message || "Login failed!");
             }
 
             const decodedToken = jwtDecode(data.token);
 
             if (decodedToken.role !== "ADMIN") {
-                throw new Error("Bạn không có quyền truy cập!");
+                throw new Error("You do not have access!");
             }
 
             localStorage.setItem("authToken", data.token);
@@ -42,47 +42,128 @@ export default function Login() {
     };
 
     return (
-        <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
-            <div className="card p-4 shadow-lg" style={{ width: "400px" }}>
-                <h2 className="text-center fw-bold mb-3" style={{ color: "#ff69b4", textShadow: "2px 2px 4px rgba(255, 105, 180, 0.5)" }}>
-                    BeautySoft
-                </h2>
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-3 text-start">
-                        <label className="form-label">Email</label>
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="form-control p-2"
-                            required
-                        />
-                    </div>
-                    <div className="mb-3 text-start position-relative">
-                        <label className="form-label">Password</label>
-                        <div className="input-group">
-                            <input
-                                type={showPassword ? "text" : "password"}
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                className="form-control p-2 border-end-0"
-                                required
-                            />
-                            <span
-                                className="input-group-text border border-start-0 text-secondary"
-                                style={{ cursor: "pointer", backgroundColor: "#eef5ff" }}
-                                onClick={() => setShowPassword(!showPassword)}
-                            >
-                                <i className={`bi ${showPassword ? "bi-eye-slash" : "bi-eye"}`}></i>
-                            </span>
-                        </div>
-                    </div>
-                    {error && <p className="text-danger text-sm mb-2">{error}</p>}
-                    <button type="submit" className="btn btn-primary w-100">
-                        Log in
-                    </button>
-                </form>
+        <div
+        className="d-flex justify-content-center align-items-center min-vh-100"
+        style={{ backgroundColor: "white", fontFamily: "'Playfair Display', sans-serif" }}
+      >
+        <div
+          className="d-flex align-items-center"
+          style={{ boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.5)", border: "10px solid #ED1E51", backgroundColor: "white", borderRadius: "10px",width: "50%",}}
+        >
+          <div className="m-5 d-flex justify-content-center align-items-center w-50">
+            <div className="card p-4" style={{ width: "400px",borderRadius: "10px",border: "1px",backgroundColor: "white"}}
+            >
+              <h1 className="text-center fw-bold mb-3" style={{color: "#ED1E51",  fontFamily: "'Playfair Display', sans-serif",}}>
+                Log in
+              </h1>
+              <p
+                className="text-center"
+                style={{
+                  color: "#ED1E51",
+                  fontSize: "18px",
+                  fontFamily: "'Playfair Display', sans-serif",
+                }}
+              >
+                Login with your admin credentials.
+              </p>
+              <form onSubmit={handleSubmit}>
+                <div className="mb-3 text-start">
+                  <label
+                    className="form-label fw-bold"
+                    style={{
+                      fontSize: "20px",
+                      fontFamily: "'Playfair Display', sans-serif",
+                    }}
+                  >
+                    Your e-mail <span style={{ color: "red" }}>*</span>
+                  </label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="form-control p-3 border"
+                    style={{
+                      borderColor: "#ED1E51",
+                      borderRadius: "5px",
+                      fontSize: "20px",
+                      color: "black",
+                      fontFamily: "'Playfair Display', sans-serif",
+                    }}
+                    placeholder="admin@gmail.com..."
+                    required
+                  />
+                </div>
+                <div className="mb-3 text-start position-relative">
+                  <label
+                    className="form-label fw-bold"
+                    style={{
+                      fontSize: "20px",
+                      fontFamily: "'Playfair Display', sans-serif",
+                    }}
+                  >
+                    Password <span style={{ color: "red" }}>*</span>
+                  </label>
+                  <div className="input-group">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="form-control p-3 border-end-0"
+                      style={{
+                        borderRadius: "5px",
+                        fontSize: "20px",
+                        color: "black",
+                        fontFamily: "'Playfair Display', sans-serif",
+                      }}
+                      placeholder="********"
+                      required
+                    />
+                    <span
+                      className="input-group-text border border-start-0 text-secondary"
+                      style={{
+                        cursor: "pointer",
+                        backgroundColor: "#FFBBC0",
+                        fontFamily: "'Playfair Display', sans-serif",
+                      }}
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                     <i className={`bi ${showPassword ? "bi-eye-slash" : "bi-eye"} text-black fw-bold`}></i>
+                    </span>
+                  </div>
+                </div>
+                {error && <p className="text-danger text-sm mb-3 fw-bold">{error}</p>}
+                <button
+                  type="submit"
+                  className="btn w-100 p-3"
+                  style={{backgroundColor: "#ED1E51",color: "white",fontSize: "20px",fontWeight: "bold",borderRadius: "5px",fontFamily: "'Playfair Display', sans-serif",
+                  }}
+                >
+                  Log In
+                </button>
+              </form>
             </div>
+          </div>
+          <div className="w-50  justify-content-center align-items-center m-4">
+            <img
+              src="/logoBeautySoft.png"
+              alt="Logo BeautySoft"
+              style={{ maxWidth: "80%", borderRadius: "10px", marginLeft: "40px" }}
+            />
+            <p
+                className="text-center mt-3"
+                style={{ fontSize: "18px", fontFamily: "'Playfair Display', sans-serif" }}
+              >
+                Don't have an account yet?
+              </p>
+              <p
+                className="text-center"
+                style={{fontSize: "18px", fontFamily: "'Playfair Display', sans-serif", color: "#ED1E51",}}
+              >
+                Contact us at Loan@gmail.com and We will take care of everything!!
+              </p>
+          </div>
         </div>
+      </div>
+      
     );
 }

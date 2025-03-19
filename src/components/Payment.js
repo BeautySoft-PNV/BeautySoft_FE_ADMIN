@@ -9,11 +9,11 @@ export default function Payment() {
     useEffect(() => {
         const token = localStorage.getItem("authToken");
         if (!token) {
-            console.error("Không tìm thấy token! Người dùng chưa đăng nhập.");
+            console.error("Token not found! User is not logged in.");
             return;
         }
 
-        fetch("http://192.168.11.183:5280/api/payment/all", {
+        fetch("http://192.168.31.183:5280/api/payment/all", {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -22,12 +22,12 @@ export default function Payment() {
         })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error(`Lỗi: ${response.status}`);
+                    throw new Error(`Error: ${response.status}`);
                 }
                 return response.json();
             })
             .then(data => setPayments(data))
-            .catch(error => console.error("Lỗi khi lấy danh sách thanh toán:", error));
+            .catch(error => console.error("Error while retrieving payment list:", error));
     }, []);
 
     const filteredPayments = payments.filter(payment =>

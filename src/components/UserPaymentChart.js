@@ -9,7 +9,7 @@ export default function Dashboard() {
     useEffect(() => {
         const token = localStorage.getItem("authToken");
         if (!token) {
-            console.error("Không tìm thấy token! Người dùng chưa đăng nhập.");
+            console.error("Token not found! User is not logged in.");
             return;
         }
 
@@ -19,15 +19,15 @@ export default function Dashboard() {
         };
 
         Promise.all([
-            axios.get("http://192.168.11.183:5280/api/users/all", { headers }),
-            axios.get("http://192.168.11.183:5280/api/payment/all", { headers }),
+            axios.get("http://192.168.31.183:5280/api/users/all", { headers }),
+            axios.get("http://192.168.31.183:5280/api/payment/all", { headers }),
         ])
             .then(([usersResponse, paymentsResponse]) => {
                 setUsers(usersResponse.data);
                 setPayments(paymentsResponse.data);
             })
             .catch((error) => {
-                console.error("Lỗi khi tải dữ liệu:", error.response ? error.response.data : error);
+                console.error("Error loading data:", error.response ? error.response.data : error);
             });
     }, []);
 
@@ -49,7 +49,6 @@ export default function Dashboard() {
             <h2 className="text-center">User and Payment Statistics</h2>
 
             <div className="row mt-5">
-                {/* Bar chart for total users */}
                 <div className="col-md-6">
                     <h4 className="text-center">Total Users</h4>
                     <ResponsiveContainer width="100%" height={300}>
