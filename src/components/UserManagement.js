@@ -32,7 +32,7 @@ export default function UserManagement() {
     const fetchUsers = async () => {
         try {
             const token = localStorage.getItem("authToken");
-            const response = await axios.get("http://192.168.31.183:5280/api/users/all", {
+            const response = await axios.get("http://18.142.0.155:5001/api/users/all", {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -85,13 +85,12 @@ export default function UserManagement() {
 
         try {
             const token = localStorage.getItem("authToken");
-            await axios.put(`http://192.168.31.183:5280/api/users/me/${formData.id}`, formDataToSend, {
+            await axios.put(`http://18.142.0.155:5001/api/users/me/${formData.id}`, formDataToSend, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "multipart/form-data"
                 },
             });
-            alert("Update successful!");
             await fetchUsers();
             setShowModal(false);
         } catch (error) {
@@ -102,16 +101,11 @@ export default function UserManagement() {
     const handleBlockUser = async (user) => {
         const newStatus = !user.isBlocked;
         const action = newStatus ? "block" : "unblock";
-        const confirmMessage = newStatus
-            ? `Are you sure you want to LOCK the user? ${user.name}?`
-            : `Are you sure you want to UNLOCK the user? ${user.name}?`;
-
-        if (!window.confirm(confirmMessage)) return;
 
         try {
             const token = localStorage.getItem("authToken");
             const response = await axios.put(
-                `http://192.168.31.183:5280/api/users/${action}/${user.id}`,
+                `http://18.142.0.155:5001/api/users/${action}/${user.id}`,
                 {},
                 {
                     headers: {
@@ -122,7 +116,6 @@ export default function UserManagement() {
             );
 
             if (response.status === 200) {
-                alert(`User ${user.name} has been ${newStatus ? "LOCK" : "UNLOCK"}!`);
 
                 setUsers((prevUsers) =>
                     prevUsers.map((u) =>
@@ -196,7 +189,26 @@ export default function UserManagement() {
                 </tr>
                 </thead>
                 <tbody>
-    {currentUsers.length === 0 ? (
+                {users.length === 0 ? (
+                    <tr>
+                        <td
+                            colSpan="7"
+                            className="text-center"
+                            style={{
+                                color: '#dc3545',
+                                fontSize: '1.5rem',
+                                padding: '20px',
+                                backgroundColor: '#f8d7da',
+                                border: '1px solid #f5c6cb',
+                                borderRadius: '5px',
+                                fontWeight: 'bold',
+                                textAlign: 'center',
+                            }}
+                        >
+                            There are no payments yet
+                        </td>
+                    </tr>
+                ) : currentUsers.length === 0 ? (
     <tr>
         <td 
             colSpan="5" 
@@ -218,19 +230,20 @@ export default function UserManagement() {
     ) : (
         currentUsers.map((user) => (
             <tr key={user.id}>
-                <td>{user.id}</td>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td style={{ width: "50px", height: "50px" }}>
+                <td style={{ verticalAlign: "middle" }}>{user.id}</td>
+                <td style={{ verticalAlign: "middle" }}>{user.name}</td>
+                <td style={{ verticalAlign: "middle" }}>{user.email}</td>
+                <td style={{ width: "50px", height: "50px", verticalAlign: "middle" }}>
                     <img
                         src={user.avatar || "https://via.placeholder.com/50"}
                         alt="Avatar"
                         width="50"
                         height="50"
                         className="rounded-circle"
+                        style={{ objectFit: "cover" }}
                     />
                 </td>
-                <td>
+                <td style={{ verticalAlign: "middle" }}>
                     <button className="btn btn-primary btn-sm me-2" onClick={() => handleEdit(user)}>
                         Edit
                     </button>
@@ -242,6 +255,7 @@ export default function UserManagement() {
                     </button>
                 </td>
             </tr>
+
         ))
     )}
 </tbody>
@@ -254,7 +268,7 @@ export default function UserManagement() {
                     onClick={prevPage}
                     disabled={currentPage === 1}
                 >
-                    Previous page
+                    Previous
                 </button>
                 {pageNumbers.map((number) => (
                     <button
@@ -270,7 +284,7 @@ export default function UserManagement() {
                     onClick={nextPage}
                     disabled={currentPage === Math.ceil(filteredUsers.length / usersPerPage)}
                 >
-                    Next page
+                    Next
                 </button>
             </div>
 

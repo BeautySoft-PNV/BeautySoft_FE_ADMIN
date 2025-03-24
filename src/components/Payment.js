@@ -13,7 +13,7 @@ export default function Payment() {
             return;
         }
 
-        fetch("http://192.168.31.183:5280/api/payment/all", {
+        fetch("http://18.142.0.155:5001/api/payment/all", {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -73,66 +73,86 @@ export default function Payment() {
                 </tr>
                 </thead>
                 <tbody>
-    {currentItems.length === 0 ? (
-        <tr>
-            <td 
-                colSpan="7" 
-                className="text-center" 
-                style={{
-                    color: '#dc3545', 
-                    fontSize: '1.5rem', 
-                    padding: '20px', 
-                    backgroundColor: '#f8d7da', 
-                    border: '1px solid #f5c6cb', 
-                    borderRadius: '5px', 
-                    fontWeight: 'bold', 
-                    textAlign: 'center',
-                }}
-            >
-                No search results
-            </td>
-        </tr>
-    ) : (
-        currentItems.map(payment => (
-            <tr key={payment.id}>
-                <td style={{textAlign: "center", verticalAlign: "middle", height: "50px" }}>{payment.id}</td>
-                <td>{payment.user?.name || "N/A"}</td>
-                <td>{payment.user?.email || "N/A"}</td>
-                <td>{payment.typeStorage?.name || "N/A"}</td>
-                <td>{payment.typeStorage?.price ? payment.typeStorage.price.toLocaleString() : "N/A"}</td>
-                <td>{payment.typeStorage?.description || "N/A"}</td>
-                <td>{new Date(payment.dateTimeStart).toLocaleDateString()}</td>
-            </tr>
-        ))
-    )}
-</tbody>
-
+                {payments.length === 0 ? (
+                    <tr>
+                        <td
+                            colSpan="7"
+                            className="text-center"
+                            style={{
+                                color: '#dc3545',
+                                fontSize: '1.5rem',
+                                padding: '20px',
+                                backgroundColor: '#f8d7da',
+                                border: '1px solid #f5c6cb',
+                                borderRadius: '5px',
+                                fontWeight: 'bold',
+                                textAlign: 'center',
+                            }}
+                        >
+                            There are no payments yet
+                        </td>
+                    </tr>
+                ) : filteredPayments.length === 0 ? (
+                    <tr>
+                        <td
+                            colSpan="7"
+                            className="text-center"
+                            style={{
+                                color: '#ffc107',
+                                fontSize: '1.5rem',
+                                padding: '20px',
+                                backgroundColor: '#fff3cd',
+                                border: '1px solid #ffeeba',
+                                borderRadius: '5px',
+                                fontWeight: 'bold',
+                                textAlign: 'center',
+                            }}
+                        >
+                            No search results
+                        </td>
+                    </tr>
+                ) : (
+                    currentItems.map(payment => (
+                        <tr key={payment.id}>
+                            <td style={{textAlign: "center", verticalAlign: "middle", height: "50px" }}>{payment.id}</td>
+                            <td>{payment.user?.name || "N/A"}</td>
+                            <td>{payment.user?.email || "N/A"}</td>
+                            <td>{payment.typeStorage?.name || "N/A"}</td>
+                            <td>{payment.typeStorage?.price ? payment.typeStorage.price.toLocaleString() : "N/A"}</td>
+                            <td>{payment.typeStorage?.description || "N/A"}</td>
+                            <td>{new Date(payment.dateTimeStart).toLocaleDateString()}</td>
+                        </tr>
+                    ))
+                )}
+                </tbody>
             </table>
-            <div className="pagination d-flex justify-content-center mt-3">
-                <button
-                    className="btn btn-primary mx-1"
-                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                    disabled={currentPage === 1}
-                >
-                    Previous
-                </button>
-                {[...Array(totalPages)].map((_, index) => (
+            {totalPages > 0 && (
+                <div className="pagination d-flex justify-content-center mt-3">
                     <button
-                        key={index + 1}
-                        className={`btn mx-1 ${currentPage === index + 1 ? "btn-secondary" : "btn-light"}`}
-                        onClick={() => setCurrentPage(index + 1)}
+                        className="btn btn-primary mx-1"
+                        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                        disabled={currentPage === 1}
                     >
-                        {index + 1}
+                        Previous
                     </button>
-                ))}
-                <button
-                    className="btn btn-primary mx-1"
-                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                    disabled={currentPage === totalPages}
-                >
-                    Next
-                </button>
-            </div>
+                    {[...Array(totalPages)].map((_, index) => (
+                        <button
+                            key={index + 1}
+                            className={`btn mx-1 ${currentPage === index + 1 ? "btn-secondary" : "btn-light"}`}
+                            onClick={() => setCurrentPage(index + 1)}
+                        >
+                            {index + 1}
+                        </button>
+                    ))}
+                    <button
+                        className="btn btn-primary mx-1"
+                        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                        disabled={currentPage === totalPages}
+                    >
+                        Next
+                    </button>
+                </div>
+            )}
         </div>
     );
 }

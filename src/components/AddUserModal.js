@@ -16,7 +16,7 @@ export default function AddUserModal({ show, handleClose, refreshUsers }) {
     useEffect(() => {
         const fetchRoles = async () => {
             try {
-                const response = await axios.get("http://192.168.31.183:5280/api/role");
+                const response = await axios.get("http://18.142.0.155:5001/api/role");
                 setRoles(response.data);
             } catch (error) {
                 console.error("Error getting list of roles", error);
@@ -64,7 +64,7 @@ export default function AddUserModal({ show, handleClose, refreshUsers }) {
 
         try {
             await axios.post(
-                "http://192.168.31.183:5280/api/auth/register",
+                "http://18.142.0.155:5001/api/auth/register",
                 {
                     username: formData.username,
                     email: formData.email,
@@ -75,9 +75,7 @@ export default function AddUserModal({ show, handleClose, refreshUsers }) {
                     headers: { "Content-Type": "application/json" },
                 }
             );
-
-            alert("Account added successfully!");
-            refreshUsers();
+            await refreshUsers();
             handleClose();
         } catch (error) {
             if (error.response) {
