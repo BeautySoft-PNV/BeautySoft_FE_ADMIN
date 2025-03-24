@@ -5,23 +5,22 @@ import Sidebar from "./components/Sidebar";
 import UserManagement from "./components/UserManagement";
 import Payment from "./components/Payment";
 import UserPaymentChart from "./components/UserPaymentChart";
-import "./App.css"; // Thêm file CSS để chỉnh layout
+import "./App.css"; 
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [loading, setLoading] = useState(true); // Thêm state loading
+    const [loading, setLoading] = useState(true); 
 
     useEffect(() => {
         const token = localStorage.getItem("authToken");
-        setIsAuthenticated(!!token); // Kiểm tra token
-        setLoading(false); // Đánh dấu đã kiểm tra xong
+        setIsAuthenticated(!!token);
+        setLoading(false); 
     }, []);
 
     const handleLoginSuccess = () => {
         setIsAuthenticated(true);
     };
 
-    // 🔄 Nếu đang kiểm tra token, hiển thị loading
     if (loading) {
         return <div>Loading...</div>;
     }

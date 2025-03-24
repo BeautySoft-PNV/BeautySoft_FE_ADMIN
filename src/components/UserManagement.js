@@ -28,6 +28,7 @@ export default function UserManagement() {
         fetchUsers();
     }, []);
 
+
     const fetchUsers = async () => {
         try {
             const token = localStorage.getItem("authToken");
@@ -141,7 +142,7 @@ export default function UserManagement() {
     };
 
     const filteredUsers = users.filter((user) =>
-        user.name.toLowerCase().includes(searchTerm.toLowerCase())
+        user.email.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const indexOfLastUser = currentPage * usersPerPage;
@@ -195,34 +196,56 @@ export default function UserManagement() {
                 </tr>
                 </thead>
                 <tbody>
-                {currentUsers.map((user) => (
-                    <tr key={user.id}>
-                        <td>{user.id}</td>
-                        <td>{user.name}</td>
-                        <td>{user.email}</td>
-                        <td style={{ width: "50px", height: "50px" }}>
-                            <img
-                                src={user.avatar || "https://via.placeholder.com/50"}
-                                alt="Avatar"
-                                width="50"
-                                height="50"
-                                className="rounded-circle"
-                            />
-                        </td>
-                        <td>
-                            <button className="btn btn-primary btn-sm me-2" onClick={() => handleEdit(user)}>
-                               Edit
-                            </button>
-                            <button
-                                className={`btn ${user.isBlocked ? "btn-success" : "btn-danger"} btn-sm me-2`}
-                                onClick={() => handleBlockUser(user)}
-                            >
-                                {user.isBlocked ? "Unlock" : "Lock"}
-                            </button>
-                        </td>
-                    </tr>
-                ))}
-                </tbody>
+    {currentUsers.length === 0 ? (
+    <tr>
+        <td 
+            colSpan="5" 
+            className="text-center" 
+            style={{
+                color: '#dc3545', 
+                fontSize: '1.5rem', 
+                padding: '20px', 
+                backgroundColor: '#f8d7da', 
+                border: '1px solid #f5c6cb', 
+                borderRadius: '5px', 
+                fontWeight: 'bold', 
+                textAlign: 'center',
+            }}
+        >
+        No search results
+    </td>
+</tr>
+    ) : (
+        currentUsers.map((user) => (
+            <tr key={user.id}>
+                <td>{user.id}</td>
+                <td>{user.name}</td>
+                <td>{user.email}</td>
+                <td style={{ width: "50px", height: "50px" }}>
+                    <img
+                        src={user.avatar || "https://via.placeholder.com/50"}
+                        alt="Avatar"
+                        width="50"
+                        height="50"
+                        className="rounded-circle"
+                    />
+                </td>
+                <td>
+                    <button className="btn btn-primary btn-sm me-2" onClick={() => handleEdit(user)}>
+                        Edit
+                    </button>
+                    <button
+                        className={`btn ${user.isBlocked ? "btn-success" : "btn-danger"} btn-sm me-2`}
+                        onClick={() => handleBlockUser(user)}
+                    >
+                        {user.isBlocked ? "Unlock" : "Lock"}
+                    </button>
+                </td>
+            </tr>
+        ))
+    )}
+</tbody>
+
             </table>
 
             <div className="d-flex justify-content-center mt-4">

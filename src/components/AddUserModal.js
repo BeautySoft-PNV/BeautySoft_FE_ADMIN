@@ -37,7 +37,30 @@ export default function AddUserModal({ show, handleClose, refreshUsers }) {
 
     const handleAddUser = async (e) => {
         e.preventDefault();
-        setErrors({}); 
+        setErrors({});
+        const newErrors = {};
+
+        if (!formData.username) {
+            newErrors.username = "Username is required!";
+        }
+        if (!formData.email) {
+            newErrors.email = "Email is required!";
+        } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email)) {
+            newErrors.email = "Email is not in correct format! Example: example@gmail.com";
+        }
+        if (!formData.password) {
+            newErrors.password = "Password is required!";
+        } else if (formData.email === formData.password) {
+            newErrors.password = "Email and Password cannot be the same!";
+        }
+        if (!formData.roleId || parseInt(formData.roleId, 10) <= 0) {
+            newErrors.roleId = "Role is required and must be greater than 0!";
+        }
+
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            return;
+        }
 
         try {
             await axios.post(
@@ -59,10 +82,24 @@ export default function AddUserModal({ show, handleClose, refreshUsers }) {
         } catch (error) {
             if (error.response) {
                 const { data } = error.response;
-                if (data.message === "Account already exists!") {
-                    setErrors((prev) => ({ ...prev, email: "Account already exists!" }));
-                } else if (data.errors && data.errors.Password) {
-                    setErrors((prev) => ({ ...prev, password: data.errors.Password[0] }));
+                if (data.errors) {
+                    const serverErrors = {};
+                    if (data.errors.Email) {
+                        serverErrors.email = data.errors.Email[0];
+                    }
+                    if (data.errors.RoleId) {
+                        serverErrors.roleId = data.errors.RoleId[0];
+                    }
+                    if (data.errors.Password) {
+                        serverErrors.password = data.errors.Password[0];
+                    }
+                    if (data.errors.Username) {
+                        serverErrors.username = data.errors.Username[0];
+                    }
+                    setErrors((prev) => ({ ...prev, ...serverErrors }));
+                } else if (data.message === "Account already exists!") {
+                    newErrors.email = "Account already exists!";
+                    setErrors((prev) => ({ ...prev, ...newErrors }));
                 }
             }
         }
@@ -79,12 +116,12 @@ export default function AddUserModal({ show, handleClose, refreshUsers }) {
                         <label className="form-label">Full Name</label>
                         <input
                             type="text"
-                            className="form-control"
+                            className={`form-control ${errors.username ? "is-invalid" : ""}`}
                             name="username"
                             value={formData.username}
                             onChange={handleChange}
-                            required
                         />
+                        {errors.username && <div className="invalid-feedback">{errors.username}</div>}
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Email</label>
@@ -94,7 +131,6 @@ export default function AddUserModal({ show, handleClose, refreshUsers }) {
                             name="email"
                             value={formData.email}
                             onChange={handleChange}
-                            required
                         />
                         {errors.email && <div className="invalid-feedback">{errors.email}</div>}
                     </div>
@@ -106,18 +142,16 @@ export default function AddUserModal({ show, handleClose, refreshUsers }) {
                             name="password"
                             value={formData.password}
                             onChange={handleChange}
-                            required
                         />
                         {errors.password && <div className="invalid-feedback">{errors.password}</div>}
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Roles</label>
                         <select
-                            className="form-control"
+                            className={`form-control ${errors.roleId ? "is-invalid" : ""}`}
                             name="roleId"
                             value={formData.roleId}
                             onChange={handleChange}
-                            required
                         >
                             <option value="">-- Select role --</option>
                             {roles.map((role) => (
@@ -126,6 +160,7 @@ export default function AddUserModal({ show, handleClose, refreshUsers }) {
                                 </option>
                             ))}
                         </select>
+                        {errors.roleId && <div className="invalid-feedback">{errors.roleId}</div>}
                     </div>
                     <Button variant="success" type="submit">
                         Add
