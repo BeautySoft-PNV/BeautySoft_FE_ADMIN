@@ -19,8 +19,8 @@ export default function Dashboard() {
         };
 
         Promise.all([
-            axios.get("http://18.142.0.155:5001/api/users/all", { headers }),
-            axios.get("http://18.142.0.155:5001/api/payment/all", { headers }),
+            axios.get("/api/users/all", { headers }),
+            axios.get("/api/payment/all", { headers }),
         ])
             .then(([usersResponse, paymentsResponse]) => {
                 setUsers(usersResponse.data);

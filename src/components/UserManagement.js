@@ -32,7 +32,7 @@ export default function UserManagement() {
     const fetchUsers = async () => {
         try {
             const token = localStorage.getItem("authToken");
-            const response = await axios.get("http://18.142.0.155:5001/api/users/all", {
+            const response = await axios.get("/api/users/all", {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -85,7 +85,7 @@ export default function UserManagement() {
 
         try {
             const token = localStorage.getItem("authToken");
-            await axios.put(`http://18.142.0.155:5001/api/users/me/${formData.id}`, formDataToSend, {
+            await axios.put(`/api/users/me/${formData.id}`, formDataToSend, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "multipart/form-data"
@@ -105,7 +105,7 @@ export default function UserManagement() {
         try {
             const token = localStorage.getItem("authToken");
             const response = await axios.put(
-                `http://18.142.0.155:5001/api/users/${action}/${user.id}`,
+                `/api/users/${action}/${user.id}`,
                 {},
                 {
                     headers: {

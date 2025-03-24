@@ -13,7 +13,7 @@ export default function Payment() {
             return;
         }
 
-        fetch("http://18.142.0.155:5001/api/payment/all", {
+        fetch("/api/payment/all", {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,

@@ -64,7 +64,7 @@ export default function AddUserModal({ show, handleClose, refreshUsers }) {
 
         try {
             await axios.post(
-                "http://18.142.0.155:5001/api/auth/register",
+                "/api/auth/register",
                 {
                     username: formData.username,
                     email: formData.email,
