@@ -5,7 +5,7 @@ export default function Payment() {
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
-
+   const [users, setUsers] = useState([]);
     useEffect(() => {
         const token = localStorage.getItem("authToken");
         if (!token) {
@@ -30,16 +30,23 @@ export default function Payment() {
             .catch(error => console.error("Error while retrieving payment list:", error));
     }, []);
 
+    const [usersPerPage] = useState(10);
     const filteredPayments = payments.filter(payment =>
         payment.user?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         payment.user?.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         payment.typeStorage?.name?.toLowerCase().includes(searchTerm.toLowerCase())
     );
+    const filteredUsers = users.filter((user) =>
+        user.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
+    const indexOfLastUser = currentPage * usersPerPage;
+    const indexOfFirstUser = indexOfLastUser - usersPerPage;
+  
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = filteredPayments.slice(indexOfFirstItem, indexOfLastItem);
-
+    const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
     const totalPages = Math.ceil(filteredPayments.length / itemsPerPage);
 
     return (
@@ -66,18 +73,40 @@ export default function Payment() {
                 </tr>
                 </thead>
                 <tbody>
-                {currentItems.map(payment => (
-                    <tr key={payment.id}>
-                        <td style={{textAlign: "center", verticalAlign: "middle", height: "50px" }}>{payment.id}</td>
-                        <td>{payment.user?.name || "N/A"}</td>
-                        <td>{payment.user?.email || "N/A"}</td>
-                        <td>{payment.typeStorage?.name || "N/A"}</td>
-                        <td>{payment.typeStorage?.price ? payment.typeStorage.price.toLocaleString() : "N/A"}</td>
-                        <td>{payment.typeStorage?.description || "N/A"}</td>
-                        <td>{new Date(payment.dateTimeStart).toLocaleDateString()}</td>
-                    </tr>
-                ))}
-                </tbody>
+    {currentItems.length === 0 ? (
+        <tr>
+            <td 
+                colSpan="7" 
+                className="text-center" 
+                style={{
+                    color: '#dc3545', 
+                    fontSize: '1.5rem', 
+                    padding: '20px', 
+                    backgroundColor: '#f8d7da', 
+                    border: '1px solid #f5c6cb', 
+                    borderRadius: '5px', 
+                    fontWeight: 'bold', 
+                    textAlign: 'center',
+                }}
+            >
+                No search results
+            </td>
+        </tr>
+    ) : (
+        currentItems.map(payment => (
+            <tr key={payment.id}>
+                <td style={{textAlign: "center", verticalAlign: "middle", height: "50px" }}>{payment.id}</td>
+                <td>{payment.user?.name || "N/A"}</td>
+                <td>{payment.user?.email || "N/A"}</td>
+                <td>{payment.typeStorage?.name || "N/A"}</td>
+                <td>{payment.typeStorage?.price ? payment.typeStorage.price.toLocaleString() : "N/A"}</td>
+                <td>{payment.typeStorage?.description || "N/A"}</td>
+                <td>{new Date(payment.dateTimeStart).toLocaleDateString()}</td>
+            </tr>
+        ))
+    )}
+</tbody>
+
             </table>
             <div className="pagination d-flex justify-content-center mt-3">
                 <button

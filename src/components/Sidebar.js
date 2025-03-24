@@ -14,7 +14,7 @@ export default function Sidebar() {
 
     return (
         <div className="d-flex flex-column p-4 bg-dark text-white vh-100 position-fixed">
-            <h4 className="text-center fw-bold mb-4">Admin Panel</h4>
+            <h4 className="text-center fw-bold mb-4">Admin BeautySoft</h4>
             <hr className="border-secondary w-100 my-3" style={{ borderWidth: "3px" }} />
             <ul className="nav nav-pills flex-column">
                 <li className="nav-item">
