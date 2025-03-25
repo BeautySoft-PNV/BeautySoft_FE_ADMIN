@@ -277,7 +277,7 @@ export default function UserManagement() {
 
             </table>
 
-            {Math.ceil(filteredUsers.length / usersPerPage) > 1 && (
+            {Math.ceil(filteredUsers.length / usersPerPage) > 0 && (
                 <div className="d-flex justify-content-center mt-4">
                     <button
                         className="btn me-2"
