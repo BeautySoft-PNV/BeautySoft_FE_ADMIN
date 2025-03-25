@@ -27,6 +27,7 @@ export default function Login() {
             return;
         }
         try {
+            console.log("Fetching:", "/api/auth/login");
             const response = await fetch("/api/auth/login", {
                 method: "POST",
                 headers: {

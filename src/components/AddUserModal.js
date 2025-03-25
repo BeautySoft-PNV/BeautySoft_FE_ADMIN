@@ -16,7 +16,7 @@ export default function AddUserModal({ show, handleClose, refreshUsers }) {
     useEffect(() => {
         const fetchRoles = async () => {
             try {
-                const response = await axios.get("http://18.142.0.155:5001/api/role");
+                const response = await axios.get("/api/role");
                 setRoles(response.data);
             } catch (error) {
                 console.error("Error getting list of roles", error);
