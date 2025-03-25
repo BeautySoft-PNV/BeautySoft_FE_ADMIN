@@ -51,10 +51,14 @@ export default function Payment() {
 
     return (
         <div className="container mt-4" style={{ marginLeft: "350px", width: "10000px" }}>
-            <h2 className="text-center">Payment Management</h2>
+            <h2 className="text-center" style={{
+                color: "#ED1E51",
+                fontWeight: "bold",
+                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)"
+            }}>Payment Management</h2>
             <input
                 type="text"
-                placeholder="Search..."
+                placeholder="Search by email..."
                 className="form-control mb-3"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -129,25 +133,40 @@ export default function Payment() {
             {totalPages > 0 && (
                 <div className="pagination d-flex justify-content-center mt-3">
                     <button
-                        className="btn btn-primary mx-1"
+                        className="btn mx-1"
                         onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                         disabled={currentPage === 1}
+                        style={{
+                            background: "#ED1E51",
+                            borderColor: "#ED1E51",
+                            color: "white"
+                        }}
                     >
                         Previous
                     </button>
                     {[...Array(totalPages)].map((_, index) => (
                         <button
                             key={index + 1}
-                            className={`btn mx-1 ${currentPage === index + 1 ? "btn-secondary" : "btn-light"}`}
+                            className="btn mx-1"
                             onClick={() => setCurrentPage(index + 1)}
+                            style={{
+                                background: "#FFBBC0",
+                                borderColor: "#FFBBC0",
+                                color: "black"
+                            }}
                         >
                             {index + 1}
                         </button>
                     ))}
                     <button
-                        className="btn btn-primary mx-1"
+                        className="btn mx-1"
                         onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                         disabled={currentPage === totalPages}
+                        style={{
+                            background: "#ED1E51",
+                            borderColor: "#ED1E51",
+                            color: "white"
+                        }}
                     >
                         Next
                     </button>

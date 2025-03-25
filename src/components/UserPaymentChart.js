@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import axios from "axios";
-
 export default function Dashboard() {
     const [users, setUsers] = useState([]);
     const [payments, setPayments] = useState([]);
@@ -46,11 +45,15 @@ export default function Dashboard() {
 
     return (
         <div className="container mt-4" style={{ marginLeft: "350px", width: "10000px" }}>
-            <h2 className="text-center">User and Payment Statistics</h2>
+            <h2 className="text-center" style={{
+                color: "#ED1E51",
+                fontWeight: "bold",
+                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)"
+            }}>User and Payment Statistics</h2>
 
             <div className="row mt-5">
                 <div className="col-md-6">
-                    <h4 className="text-center">Total Users</h4>
+                    <h4 className="text-center" style={{ fontWeight: "bold",}}>Total Users</h4>
                     <ResponsiveContainer width="100%" height={300}>
                         <BarChart data={userData}>
                             <XAxis dataKey="name" />
@@ -63,7 +66,7 @@ export default function Dashboard() {
                 </div>
 
                 <div className="col-md-6">
-                    <h4 className="text-center">Purchase Ratio & Total Revenue</h4>
+                    <h4 className="text-center" style={{ fontWeight: "bold",}}>Purchase Ratio & Total Revenue</h4>
                     <ResponsiveContainer width="100%" height={300}>
                         <PieChart>
                             <Pie data={paymentData} cx="50%" cy="50%" outerRadius={100} fill="#8884d8" dataKey="value" label>
@@ -75,7 +78,7 @@ export default function Dashboard() {
                             <Legend />
                         </PieChart>
                     </ResponsiveContainer>
-                    <h5 className="text-center mt-3">Total Revenue: {totalRevenue.toLocaleString()} VND</h5>
+                    <h5 className="text-center mt-3" style={{ fontWeight: "bold",}}>Total Revenue: {totalRevenue.toLocaleString()} VND</h5>
                 </div>
             </div>
         </div>

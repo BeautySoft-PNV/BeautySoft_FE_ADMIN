@@ -160,7 +160,7 @@ export default function AddUserModal({ show, handleClose, refreshUsers }) {
                         </select>
                         {errors.roleId && <div className="invalid-feedback">{errors.roleId}</div>}
                     </div>
-                    <Button variant="success" type="submit">
+                    <Button variant="success" type="submit" style={{background:'#ED1E51', color:"white"}}>
                         Add
                     </Button>
                 </form>

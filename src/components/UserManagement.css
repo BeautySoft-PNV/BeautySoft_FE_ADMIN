@@ -24,3 +24,7 @@
 .container{
     margin-left: 250px;
 }
+.custom-thead {
+    background: #ED1E51 !important;
+    color: white !important;
+}

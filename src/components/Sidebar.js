@@ -1,6 +1,8 @@
 import React from "react";
 import { Link, useLocation, useNavigate  } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./Sidebar.css";
+
 
 export default function Sidebar() {
     const location = useLocation();
@@ -13,9 +15,9 @@ export default function Sidebar() {
     };
 
     return (
-        <div className="d-flex flex-column p-4 bg-dark text-white vh-100 position-fixed">
+        <div className="d-flex flex-column p-4  text-white vh-100 position-fixed" style ={{ background:'#ED1E51',width: "300px"}}>
             <h4 className="text-center fw-bold mb-4">Admin BeautySoft</h4>
-            <hr className="border-secondary w-100 my-3" style={{ borderWidth: "3px" }} />
+            <hr className="w-100 my-3" style={{ borderTop: "3px solid white" }} />
             <ul className="nav nav-pills flex-column">
                 <li className="nav-item">
                     <Link
@@ -28,7 +30,7 @@ export default function Sidebar() {
                         <span>User Management</span>
                     </Link>
                 </li>
-                <hr className="border-secondary w-100 my-3" style={{ borderWidth: "3px" }} />
+                <hr className="w-100 my-3" style={{ borderTop: "3px solid white" }} />
                 <li className="nav-item">
                     <Link
                         to="/payment"
@@ -40,7 +42,7 @@ export default function Sidebar() {
                         <span>Payment Management</span>
                     </Link>
                 </li>
-                <hr className="border-secondary w-100 my-3" style={{ borderWidth: "3px" }} />
+                <hr className="w-100 my-3" style={{ borderTop: "3px solid white" }} />
                 <li className="nav-item">
                     <Link
                         to="/chart"
@@ -55,11 +57,18 @@ export default function Sidebar() {
             </ul>
 
             <button
-            className="btn btn-danger mt-auto fw-bold"
-            onClick={handleLogout}
-            style={{ height: "50px", textAlign: "center" }}
+                className="btn mt-auto fw-bold"
+                onClick={handleLogout}
+                style={{
+                    height: "50px",
+                    textAlign: "center",
+                    background: "#FFBBC0",
+                    color: "black",
+                    border: "2px solid white",
+                    borderRadius: "8px"
+                }}
             >
-            <i className="bi bi-door-closed"></i> Logout
+                <i className="bi bi-door-closed"></i> Logout
             </button>
 
         </div>

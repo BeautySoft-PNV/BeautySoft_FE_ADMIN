@@ -3,12 +3,13 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import EditUserModal from "./EditUserModal"; 
 import AddUserModal from "./AddUserModal";
-
+import { useNavigate } from "react-router-dom";
 export default function UserManagement() {
     const [users, setUsers] = useState([]);
     const [editingUser, setEditingUser] = useState(null);
     const [showModal, setShowModal] = useState(false);
-    const [showAddModal, setShowAddModal] = useState(false); 
+    const [showAddModal, setShowAddModal] = useState(false);
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         id: "",
         name: "",
@@ -39,6 +40,10 @@ export default function UserManagement() {
             });
             setUsers(response.data);
         } catch (error) {
+            if (error.response && error.response.status === 401) {
+                localStorage.removeItem("authToken");
+                navigate("/login");
+            }
             console.error("Error while getting user list", error);
         }
     };
@@ -163,23 +168,33 @@ export default function UserManagement() {
 
     return (
         <div className="container mt-4" style={{ marginLeft: "350px", width: "10000px" }}>
-            <h2 className="text-center mb-4">User Management</h2>
+            <h2
+                className="text-center mb-4"
+                style={{
+                    color: "#ED1E51",
+                    fontWeight: "bold",
+                    textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)"
+                }}
+            >
+                User Management
+            </h2>
 
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px", marginTop: "35px" }}>
+
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px",  }}>
                 <input
                     type="text"
                     className="form-control"
-                    placeholder="Search by name..."
+                    placeholder="Search by email..."
                     value={searchTerm}
                     onChange={handleSearch}
                     style={{ width: "30%" }}
                 />
-                <button className="btn btn-success" onClick={() => setShowAddModal(true)}>
+                <button className="btn" style={{background:'#ED1E51', color:"white"}} onClick={() => setShowAddModal(true)}>
                     Add Account
                 </button>
             </div>
             <table className="table table-bordered text-center">
-                <thead className="table-dark">
+                <thead >
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
@@ -262,31 +277,50 @@ export default function UserManagement() {
 
             </table>
 
-            <div className="d-flex justify-content-center mt-4">
-                <button
-                    className="btn btn-secondary me-2"
-                    onClick={prevPage}
-                    disabled={currentPage === 1}
-                >
-                    Previous
-                </button>
-                {pageNumbers.map((number) => (
+            {Math.ceil(filteredUsers.length / usersPerPage) > 1 && (
+                <div className="d-flex justify-content-center mt-4">
                     <button
-                        key={number}
-                        className={`btn ${currentPage === number ? "btn-primary" : "btn-secondary"} me-2`}
-                        onClick={() => paginate(number)}
+                        className="btn me-2"
+                        onClick={prevPage}
+                        disabled={currentPage === 1}
+                        style={{
+                            background: "#ED1E51",
+                            borderColor: "#ED1E51",
+                            color: "white"
+                        }}
                     >
-                        {number}
+                        Previous
                     </button>
-                ))}
-                <button
-                    className="btn btn-secondary"
-                    onClick={nextPage}
-                    disabled={currentPage === Math.ceil(filteredUsers.length / usersPerPage)}
-                >
-                    Next
-                </button>
-            </div>
+                    {pageNumbers.map((number) => (
+                        <button
+                            key={number}
+                            className="btn me-2"
+                            onClick={() => paginate(number)}
+                            style={{
+                                background: "#FFBBC0",
+                                borderColor: "#FFBBC0",
+                                color: "black"
+                            }}
+                        >
+                            {number}
+                        </button>
+                    ))}
+                    <button
+                        className="btn"
+                        onClick={nextPage}
+                        disabled={currentPage === Math.ceil(filteredUsers.length / usersPerPage)}
+                        style={{
+                            background: "#ED1E51",
+                            borderColor: "#ED1E51",
+                            color: "white"
+                        }}
+                    >
+                        Next
+                    </button>
+                </div>
+            )}
+
+
 
             <EditUserModal
                 show={showModal}
